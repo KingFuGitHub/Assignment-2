@@ -1,27 +1,19 @@
-
-
-
-public class User implements Data {
-
-    private String name;
+public class Group implements Data {
     
-  
-    @Override
-    public String getName(){
-        return name.toString();
-    }
+    private String name;
 
     @Override
     public void setName(String name){
         this.name = name;
     }
 
+    @Override
+    public String getName(){
+        return name;
+    }
 
     public String toString(){
         return name;
     }
-
-
-
 
 }
