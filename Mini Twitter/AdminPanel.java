@@ -9,10 +9,9 @@ public class AdminPanel extends JFrame {
 
     private Data data;
     private DefaultMutableTreeNode root;
-    Object nodeInfo ;
+    Object nodeInfo;
 
     HashMap<String, String> Users = new HashMap<String, String>();
-
 
     public void adminGUI() {
 
@@ -20,7 +19,6 @@ public class AdminPanel extends JFrame {
         data.setName("Root");
         root = new DefaultMutableTreeNode(data);
         nodeInfo = root.getUserObject();
-
 
         JFrame frame = new JFrame();
         JTree tree = new JTree(root);
@@ -80,53 +78,48 @@ public class AdminPanel extends JFrame {
 
         buttonAddUser.addActionListener(e -> {
 
-            if (root != null) {
-                String userName = textFieldAddUser.getText().toString().toLowerCase();
+            String userName = textFieldAddUser.getText().toString().toLowerCase();
 
-                if (nodeInfo instanceof Group && userName.length() > 0) {
+            if (nodeInfo instanceof Group && userName.length() > 0) {
 
-                    data = new User();
-                    data.setName(userName);
+                data = new User();
+                data.setName(userName);
 
-                    DefaultMutableTreeNode userNode = new DefaultMutableTreeNode(data);
-                    if (root != null) {
-                        root.add(userNode);
-                    }else{
-                        root = (DefaultMutableTreeNode) tree.getModel().getRoot();
-                        nodeInfo = root.getUserObject();
-                        root.add(userNode);
-                    }
-
-                    DefaultTreeModel model = (DefaultTreeModel) tree.getModel();
-                    model.reload(root);
+                DefaultMutableTreeNode userNode = new DefaultMutableTreeNode(data);
+                if (root != null) {
+                    root.add(userNode);
+                } else {
+                    root = (DefaultMutableTreeNode) tree.getModel().getRoot();
+                    root.add(userNode);
                 }
+
+                DefaultTreeModel model = (DefaultTreeModel) tree.getModel();
+                model.reload(root);
             }
         });
 
         buttonAddGroup.addActionListener(e -> {
-            // if (root != null) {
 
-                String groupName = textFieldAddGroup.getText().toString().toUpperCase();
+            String groupName = textFieldAddGroup.getText().toString().toUpperCase();
 
-                if (nodeInfo instanceof Group && groupName.length() > 0) {
+            if (nodeInfo instanceof Group && groupName.length() > 0) {
 
-                    data = new Group();
-                    data.setName(groupName);
+                data = new Group();
+                data.setName(groupName);
 
-                    DefaultMutableTreeNode groupNode = new DefaultMutableTreeNode(data);
-                    if (root != null) {
-                        root.add(groupNode);
-                    }else{
-                        root = (DefaultMutableTreeNode) tree.getModel().getRoot();
-                        nodeInfo = root.getUserObject();
-                        root.add(groupNode);
-                    }
-
-                    DefaultTreeModel model = (DefaultTreeModel) tree.getModel();
-                    model.reload(root);
-
+                DefaultMutableTreeNode groupNode = new DefaultMutableTreeNode(data);
+                if (root != null) {
+                    root.add(groupNode);
+                } else {
+                    root = (DefaultMutableTreeNode) tree.getModel().getRoot();
+                    root.add(groupNode);
                 }
-            
+
+                DefaultTreeModel model = (DefaultTreeModel) tree.getModel();
+                model.reload(root);
+
+            }
+
         });
 
         tree.addTreeSelectionListener(e -> {
@@ -134,7 +127,7 @@ public class AdminPanel extends JFrame {
             if (root == null) {
                 return;
             }
-            
+
             nodeInfo = root.getUserObject();
         });
 
