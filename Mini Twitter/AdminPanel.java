@@ -22,10 +22,11 @@ public class AdminPanel extends JFrame {
         root = new DefaultMutableTreeNode(group);
         nodeInfo = root.getUserObject();
 
-        JFrame frame = new JFrame();
+        JFrame frame = new JFrame("Mini Twitter");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        JFrame popUpFrameTotalUser = new JFrame("Total User");
+        JPanel panelTotalUser = new JPanel();
 
-        JPanel panel = new JPanel();
 
         JTree tree = new JTree(root);
         tree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
@@ -33,6 +34,7 @@ public class AdminPanel extends JFrame {
         JScrollPane treeScrollPane = new JScrollPane(tree);
 
         JLabel labelTreeView = new JLabel("Tree View");
+        JLabel labelPopupTotalUser = new JLabel("Total user(s): " + userData.size());
 
         JButton buttonAddUser = new JButton("Add User");
         JTextField textFieldAddUser = new JTextField();
@@ -53,8 +55,14 @@ public class AdminPanel extends JFrame {
         frame.setVisible(true);
         frame.setLayout(null);
 
+        popUpFrameTotalUser.setSize(300, 200);
+        popUpFrameTotalUser.setVisible(false);
+        popUpFrameTotalUser.setLayout(null);
+
         treeScrollPane.setBounds(25, 25, 400, 425);
+
         labelTreeView.setBounds(30, 5, 100, 20);
+        labelPopupTotalUser.setBounds(100,60, 250, 20);
 
         buttonAddUser.setBounds(610, 30, 150, 40);
         textFieldAddUser.setBounds(440, 30, 165, 40);
@@ -83,6 +91,9 @@ public class AdminPanel extends JFrame {
         frame.add(buttonShowMessageTotal);
         frame.add(buttonShowPositivePercentage);
         frame.add(treeScrollPane);
+
+        popUpFrameTotalUser.add(panelTotalUser);
+        popUpFrameTotalUser.add(labelPopupTotalUser);
 
         buttonAddUser.addActionListener(e -> {
 
@@ -129,7 +140,9 @@ public class AdminPanel extends JFrame {
         });
 
         buttonShowUserTotal.addActionListener(e ->{
-            
+            popUpFrameTotalUser.setVisible(true);
+            labelPopupTotalUser.setText("Total user(s): " + userData.size());
+            System.out.println(userData.size());
         });
 
         tree.addTreeSelectionListener(e -> {
