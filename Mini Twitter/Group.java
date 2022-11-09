@@ -1,19 +1,19 @@
 public class Group implements Data {
     
-    private String name;
+    private String groupID;
 
     @Override
-    public void setName(String name){
-        this.name = name;
+    public void setName(String groupID){
+        this.groupID = groupID;
     }
 
     @Override
     public String getName(){
-        return name;
+        return groupID;
     }
 
     public String toString(){
-        return name;
+        return groupID;
     }
 
 }

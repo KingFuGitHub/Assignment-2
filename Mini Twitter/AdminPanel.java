@@ -7,23 +7,31 @@ import javax.swing.tree.TreeSelectionModel;
 
 public class AdminPanel extends JFrame {
 
-    private Data data;
+    private User user;
+    private Group group;
     private DefaultMutableTreeNode root;
     Object nodeInfo;
 
-    HashMap<String, String> Users = new HashMap<String, String>();
+    HashMap<String, User> userData = new HashMap<String, User>();
+    HashMap<String, Group> groupData = new HashMap<String, Group>();
 
     public void adminGUI() {
 
-        data = new Group();
-        data.setName("Root");
-        root = new DefaultMutableTreeNode(data);
+        group = new Group();
+        group.setName("Root");
+        root = new DefaultMutableTreeNode(group);
         nodeInfo = root.getUserObject();
 
         JFrame frame = new JFrame();
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        JPanel panel = new JPanel();
+
         JTree tree = new JTree(root);
         tree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
+
         JScrollPane treeScrollPane = new JScrollPane(tree);
+
         JLabel labelTreeView = new JLabel("Tree View");
 
         JButton buttonAddUser = new JButton("Add User");
@@ -39,7 +47,7 @@ public class AdminPanel extends JFrame {
         JButton buttonShowUserTotal = new JButton("Show user total");
         JButton buttonShowGroupTotal = new JButton("Show group total");
         JButton buttonShowMessageTotal = new JButton("Show message total");
-        JButton buttonShowPositivePercentage = new JButton("Show positive percentage");
+        JButton buttonShowPositivePercentage = new JButton("Show positive %");
 
         frame.setSize(800, 500);
         frame.setVisible(true);
@@ -80,12 +88,11 @@ public class AdminPanel extends JFrame {
 
             String userName = textFieldAddUser.getText().toString().toLowerCase();
 
-            if (nodeInfo instanceof Group && userName.length() > 0) {
+            if (nodeInfo instanceof Group && userName.length() > 0 && !userData.containsKey(userName)) {
+                user = new User();
+                user.setName(userName);
 
-                data = new User();
-                data.setName(userName);
-
-                DefaultMutableTreeNode userNode = new DefaultMutableTreeNode(data);
+                DefaultMutableTreeNode userNode = new DefaultMutableTreeNode(user);
                 if (root != null) {
                     root.add(userNode);
                 } else {
@@ -93,6 +100,7 @@ public class AdminPanel extends JFrame {
                     root.add(userNode);
                 }
 
+                userData.put(userName, user);
                 DefaultTreeModel model = (DefaultTreeModel) tree.getModel();
                 model.reload(root);
             }
@@ -102,12 +110,11 @@ public class AdminPanel extends JFrame {
 
             String groupName = textFieldAddGroup.getText().toString().toUpperCase();
 
-            if (nodeInfo instanceof Group && groupName.length() > 0) {
-
-                data = new Group();
-                data.setName(groupName);
-
-                DefaultMutableTreeNode groupNode = new DefaultMutableTreeNode(data);
+            if (nodeInfo instanceof Group && groupName.length() > 0 && !groupData.containsKey(groupName)) {
+                group = new Group();
+                group.setName(groupName);
+                
+                DefaultMutableTreeNode groupNode = new DefaultMutableTreeNode(group);
                 if (root != null) {
                     root.add(groupNode);
                 } else {
@@ -115,11 +122,14 @@ public class AdminPanel extends JFrame {
                     root.add(groupNode);
                 }
 
+                groupData.put(groupName, group);
                 DefaultTreeModel model = (DefaultTreeModel) tree.getModel();
                 model.reload(root);
-
             }
+        });
 
+        buttonShowUserTotal.addActionListener(e ->{
+            
         });
 
         tree.addTreeSelectionListener(e -> {
