@@ -23,6 +23,7 @@ public class AdminPanel extends JFrame {
 
         JFrame frame = new JFrame();
         JTree tree = new JTree(root);
+        tree.setEditable(true);
         tree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
         JScrollPane treeScrollPane = new JScrollPane(tree);
 
