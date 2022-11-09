@@ -1,3 +1,5 @@
+import java.util.HashMap;
+
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
@@ -9,17 +11,21 @@ public class AdminPanel extends JFrame {
     private DefaultMutableTreeNode root;
     Object nodeInfo ;
 
+    HashMap<String, String> Users = new HashMap<String, String>();
+
+
     public void adminGUI() {
 
         data = new Group();
         data.setName("Root");
         root = new DefaultMutableTreeNode(data);
+        nodeInfo = root.getUserObject();
+
 
         JFrame frame = new JFrame();
         JTree tree = new JTree(root);
         tree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
         JScrollPane treeScrollPane = new JScrollPane(tree);
-
         JLabel labelTreeView = new JLabel("Tree View");
 
         JButton buttonAddUser = new JButton("Add User");
@@ -73,8 +79,8 @@ public class AdminPanel extends JFrame {
         frame.add(treeScrollPane);
 
         buttonAddUser.addActionListener(e -> {
+
             if (root != null) {
-                nodeInfo = root.getUserObject();
                 String userName = textFieldAddUser.getText().toString().toLowerCase();
 
                 if (nodeInfo instanceof Group && userName.length() > 0) {
@@ -83,44 +89,52 @@ public class AdminPanel extends JFrame {
                     data.setName(userName);
 
                     DefaultMutableTreeNode userNode = new DefaultMutableTreeNode(data);
-
-                    root.add(userNode);
+                    if (root != null) {
+                        root.add(userNode);
+                    }else{
+                        root = (DefaultMutableTreeNode) tree.getModel().getRoot();
+                        nodeInfo = root.getUserObject();
+                        root.add(userNode);
+                    }
 
                     DefaultTreeModel model = (DefaultTreeModel) tree.getModel();
-
                     model.reload(root);
-                    root = (DefaultMutableTreeNode) tree.getLastSelectedPathComponent();
                 }
             }
         });
 
         buttonAddGroup.addActionListener(e -> {
-            if (root != null) {
-                nodeInfo = root.getUserObject();
+            // if (root != null) {
+
                 String groupName = textFieldAddGroup.getText().toString().toUpperCase();
 
                 if (nodeInfo instanceof Group && groupName.length() > 0) {
+
                     data = new Group();
                     data.setName(groupName);
 
                     DefaultMutableTreeNode groupNode = new DefaultMutableTreeNode(data);
-
-                    root.add(groupNode);
+                    if (root != null) {
+                        root.add(groupNode);
+                    }else{
+                        root = (DefaultMutableTreeNode) tree.getModel().getRoot();
+                        nodeInfo = root.getUserObject();
+                        root.add(groupNode);
+                    }
 
                     DefaultTreeModel model = (DefaultTreeModel) tree.getModel();
                     model.reload(root);
 
                 }
-            }
+            
         });
 
         tree.addTreeSelectionListener(e -> {
             root = (DefaultMutableTreeNode) tree.getLastSelectedPathComponent();
-
             if (root == null) {
                 return;
             }
-
+            
             nodeInfo = root.getUserObject();
         });
 

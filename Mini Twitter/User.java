@@ -1,20 +1,20 @@
 
 public class User implements Data {
 
-    private String name;
+    private String userID;
 
     @Override
     public String getName() {
-        return name.toString();
+        return userID.toString();
     }
 
     @Override
     public void setName(String name) {
-        this.name = name;
+        this.userID = name;
     }
 
     public String toString() {
-        return name;
+        return userID;
     }
 
 }
