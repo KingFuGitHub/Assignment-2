@@ -19,6 +19,7 @@ public class UserPanel extends JFrame {
 
         if (nodeInfo != null && nodeInfo instanceof User) {
             currentUserInfo = userData.get(nodeInfo.toString());
+            String currentUserInfoString = currentUserInfo.toString();
 
             JFrame userPanelFrame = new JFrame(currentUserInfo.getID());
             JButton followUserButton = new JButton("Follow User");
@@ -67,7 +68,7 @@ public class UserPanel extends JFrame {
                     System.out.println("2. true: " + currentUserInfo.isContainID(userID));
                 }
 
-                if(!currentUserInfo.getID().equals(userID)){
+                if(currentUserInfoString != userID){
                     System.out.println("3. true: " + currentUserInfo.getID() + " | " + userID);
 
                 }
