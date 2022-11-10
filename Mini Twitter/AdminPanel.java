@@ -15,7 +15,7 @@ public class AdminPanel extends JFrame {
     HashMap<String, Data> userData = new HashMap<String, Data>();
     HashMap<String, Data> groupData = new HashMap<String, Data>();
 
-    public void admin() {
+    public void adminPanel() {
 
         data = new Group();
         data.setName("Root");
