@@ -26,7 +26,9 @@ public class AdminPanel extends JFrame {
         JFrame adminPanelFrame = new JFrame("Mini Twitter");
         adminPanelFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         JFrame popUpFrameTotalUser = new JFrame("Total User");
+        popUpFrameTotalUser.setLocationRelativeTo(null);
         JFrame popUpFrameTotalGroup = new JFrame("Total Group");
+        popUpFrameTotalGroup.setLocationRelativeTo(null);
 
         JTree tree = new JTree(root);
         tree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
