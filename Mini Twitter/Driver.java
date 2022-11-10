@@ -1,9 +1,8 @@
 
-public class TreeView{
+public class Driver{
 
     public static void main(String[] args) {
         AdminPanel ui = new AdminPanel();
-        ui.adminGUI();
-       
+        ui.admin();
     }
 }

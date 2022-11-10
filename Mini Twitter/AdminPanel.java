@@ -1,3 +1,4 @@
+import java.awt.Dimension;
 import java.util.HashMap;
 
 import javax.swing.*;
@@ -7,26 +8,24 @@ import javax.swing.tree.TreeSelectionModel;
 
 public class AdminPanel extends JFrame {
 
-    private User user;
-    private Group group;
+    private Data data;
     private DefaultMutableTreeNode root;
     Object nodeInfo;
 
-    HashMap<String, User> userData = new HashMap<String, User>();
-    HashMap<String, Group> groupData = new HashMap<String, Group>();
+    HashMap<String, Data> userData = new HashMap<String, Data>();
+    HashMap<String, Data> groupData = new HashMap<String, Data>();
 
-    public void adminGUI() {
+    public void admin() {
 
-        group = new Group();
-        group.setName("Root");
-        root = new DefaultMutableTreeNode(group);
+        data = new Group();
+        data.setName("Root");
+        root = new DefaultMutableTreeNode(data);
         nodeInfo = root.getUserObject();
 
         JFrame frame = new JFrame("Mini Twitter");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         JFrame popUpFrameTotalUser = new JFrame("Total User");
-        JPanel panelTotalUser = new JPanel();
-
+        JFrame popUpFrameTotalGroup = new JFrame("Total Group");
 
         JTree tree = new JTree(root);
         tree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
@@ -35,6 +34,7 @@ public class AdminPanel extends JFrame {
 
         JLabel labelTreeView = new JLabel("Tree View");
         JLabel labelPopupTotalUser = new JLabel("Total user(s): " + userData.size());
+        JLabel labelPopupTotalGroup = new JLabel("Total group(s): " + groupData.size());
 
         JButton buttonAddUser = new JButton("Add User");
         JTextField textFieldAddUser = new JTextField();
@@ -46,9 +46,9 @@ public class AdminPanel extends JFrame {
 
         JButton buttonOpenUser = new JButton("Open user");
 
-        JButton buttonShowUserTotal = new JButton("Show user total");
-        JButton buttonShowGroupTotal = new JButton("Show group total");
-        JButton buttonShowMessageTotal = new JButton("Show message total");
+        JButton buttonShowUserTotal = new JButton("Show total user");
+        JButton buttonShowGroupTotal = new JButton("Show total group");
+        JButton buttonShowMessageTotal = new JButton("Show total message");
         JButton buttonShowPositivePercentage = new JButton("Show positive %");
 
         frame.setSize(800, 500);
@@ -59,10 +59,15 @@ public class AdminPanel extends JFrame {
         popUpFrameTotalUser.setVisible(false);
         popUpFrameTotalUser.setLayout(null);
 
+        popUpFrameTotalGroup.setSize(300, 200);
+        popUpFrameTotalGroup.setVisible(false);
+        popUpFrameTotalGroup.setLayout(null);
+
         treeScrollPane.setBounds(25, 25, 400, 425);
 
         labelTreeView.setBounds(30, 5, 100, 20);
         labelPopupTotalUser.setBounds(100,60, 250, 20);
+        labelPopupTotalGroup.setBounds(100, 60, 250, 20);
 
         buttonAddUser.setBounds(610, 30, 150, 40);
         textFieldAddUser.setBounds(440, 30, 165, 40);
@@ -92,18 +97,18 @@ public class AdminPanel extends JFrame {
         frame.add(buttonShowPositivePercentage);
         frame.add(treeScrollPane);
 
-        popUpFrameTotalUser.add(panelTotalUser);
         popUpFrameTotalUser.add(labelPopupTotalUser);
+        popUpFrameTotalGroup.add(labelPopupTotalGroup);
 
         buttonAddUser.addActionListener(e -> {
 
             String userName = textFieldAddUser.getText().toString().toLowerCase();
 
             if (nodeInfo instanceof Group && userName.length() > 0 && !userData.containsKey(userName)) {
-                user = new User();
-                user.setName(userName);
+                data = new User();
+                data.setName(userName);
 
-                DefaultMutableTreeNode userNode = new DefaultMutableTreeNode(user);
+                DefaultMutableTreeNode userNode = new DefaultMutableTreeNode(data);
                 if (root != null) {
                     root.add(userNode);
                 } else {
@@ -111,10 +116,12 @@ public class AdminPanel extends JFrame {
                     root.add(userNode);
                 }
 
-                userData.put(userName, user);
+                userData.put(userName, data);
                 DefaultTreeModel model = (DefaultTreeModel) tree.getModel();
                 model.reload(root);
+                textFieldAddUser.setText("");
             }
+
         });
 
         buttonAddGroup.addActionListener(e -> {
@@ -122,10 +129,10 @@ public class AdminPanel extends JFrame {
             String groupName = textFieldAddGroup.getText().toString().toUpperCase();
 
             if (nodeInfo instanceof Group && groupName.length() > 0 && !groupData.containsKey(groupName)) {
-                group = new Group();
-                group.setName(groupName);
+                data = new Group();
+                data.setName(groupName);
                 
-                DefaultMutableTreeNode groupNode = new DefaultMutableTreeNode(group);
+                DefaultMutableTreeNode groupNode = new DefaultMutableTreeNode(data);
                 if (root != null) {
                     root.add(groupNode);
                 } else {
@@ -133,16 +140,22 @@ public class AdminPanel extends JFrame {
                     root.add(groupNode);
                 }
 
-                groupData.put(groupName, group);
+                groupData.put(groupName, data);
                 DefaultTreeModel model = (DefaultTreeModel) tree.getModel();
                 model.reload(root);
+                textFieldAddGroup.setText("");
             }
+
         });
 
         buttonShowUserTotal.addActionListener(e ->{
-            popUpFrameTotalUser.setVisible(true);
             labelPopupTotalUser.setText("Total user(s): " + userData.size());
-            System.out.println(userData.size());
+            popUpFrameTotalUser.setVisible(true);
+        });
+
+        buttonShowGroupTotal.addActionListener(e->{
+            labelPopupTotalGroup.setText("Total group(s): " + groupData.size());
+            popUpFrameTotalGroup.setVisible(true);
         });
 
         tree.addTreeSelectionListener(e -> {
