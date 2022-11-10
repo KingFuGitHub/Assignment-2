@@ -1,6 +1,6 @@
 public interface Data {
     
-    public void setName(String name);
+    public void setID(String ID);
 
-    public String getName();
+    public String getID();
 }

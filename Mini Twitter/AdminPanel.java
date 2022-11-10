@@ -1,4 +1,3 @@
-import java.awt.Dimension;
 import java.util.HashMap;
 
 import javax.swing.*;
@@ -8,19 +7,21 @@ import javax.swing.tree.TreeSelectionModel;
 
 public class AdminPanel extends JFrame {
 
-    private Data data;
+    // private Data data;
+    private User user;
+    private Group group;
     private DefaultMutableTreeNode root;
     private UserPanel userPanel = new UserPanel();
     Object nodeInfo;
 
-    HashMap<String, Data> userData = new HashMap<String, Data>();
-    HashMap<String, Data> groupData = new HashMap<String, Data>();
+    public HashMap<String, User> userData = new HashMap<String, User>();
+    public HashMap<String, Group> groupData = new HashMap<String, Group>();
 
     public void adminPanel() {
 
-        data = new Group();
-        data.setName("Root");
-        root = new DefaultMutableTreeNode(data);
+        group = new Group();
+        group.setID("Root");
+        root = new DefaultMutableTreeNode(group);
         nodeInfo = root.getUserObject();
 
         JFrame adminPanelFrame = new JFrame("Mini Twitter");
@@ -107,10 +108,10 @@ public class AdminPanel extends JFrame {
             String userName = textFieldAddUser.getText().toString().toLowerCase();
 
             if (nodeInfo instanceof Group && userName.length() > 0 && !userData.containsKey(userName)) {
-                data = new User();
-                data.setName(userName);
+                user = new User();
+                user.setID(userName);
 
-                DefaultMutableTreeNode userNode = new DefaultMutableTreeNode(data);
+                DefaultMutableTreeNode userNode = new DefaultMutableTreeNode(user);
                 if (root != null) {
                     root.add(userNode);
                 } else {
@@ -118,7 +119,7 @@ public class AdminPanel extends JFrame {
                     root.add(userNode);
                 }
 
-                userData.put(userName, data);
+                userData.put(userName, user);
                 DefaultTreeModel model = (DefaultTreeModel) tree.getModel();
                 model.reload(root);
                 textFieldAddUser.setText("");
@@ -131,10 +132,10 @@ public class AdminPanel extends JFrame {
             String groupName = textFieldAddGroup.getText().toString().toUpperCase();
 
             if (nodeInfo instanceof Group && groupName.length() > 0 && !groupData.containsKey(groupName)) {
-                data = new Group();
-                data.setName(groupName);
+                group = new Group();
+                group.setID(groupName);
 
-                DefaultMutableTreeNode groupNode = new DefaultMutableTreeNode(data);
+                DefaultMutableTreeNode groupNode = new DefaultMutableTreeNode(group);
                 if (root != null) {
                     root.add(groupNode);
                 } else {
@@ -142,7 +143,7 @@ public class AdminPanel extends JFrame {
                     root.add(groupNode);
                 }
 
-                groupData.put(groupName, data);
+                groupData.put(groupName, group);
                 DefaultTreeModel model = (DefaultTreeModel) tree.getModel();
                 model.reload(root);
                 textFieldAddGroup.setText("");
@@ -161,7 +162,7 @@ public class AdminPanel extends JFrame {
         });
 
         buttonOpenUser.addActionListener(e -> {
-            userPanel.userPanel(true, nodeInfo);
+            userPanel.userPanel(nodeInfo, userData);
         });
 
         tree.addTreeSelectionListener(e -> {
@@ -170,7 +171,7 @@ public class AdminPanel extends JFrame {
             if (root == null) {
                 return;
             }
-
+            
             nodeInfo = root.getUserObject();
         });
 
