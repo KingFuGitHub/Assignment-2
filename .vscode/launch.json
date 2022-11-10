@@ -6,6 +6,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "Launch Driver",
+            "request": "launch",
+            "mainClass": "Driver",
+            "projectName": "Assignment-2-Mini-Twitter_20dfb2ee"
+        },
+        {
+            "type": "java",
             "name": "Launch TreeView",
             "request": "launch",
             "mainClass": "TreeView",

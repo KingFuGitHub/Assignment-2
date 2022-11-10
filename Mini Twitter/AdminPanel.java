@@ -10,6 +10,7 @@ public class AdminPanel extends JFrame {
 
     private Data data;
     private DefaultMutableTreeNode root;
+    private UserPanel userPanel = new UserPanel();
     Object nodeInfo;
 
     HashMap<String, Data> userData = new HashMap<String, Data>();
@@ -22,8 +23,8 @@ public class AdminPanel extends JFrame {
         root = new DefaultMutableTreeNode(data);
         nodeInfo = root.getUserObject();
 
-        JFrame frame = new JFrame("Mini Twitter");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        JFrame adminPanelFrame = new JFrame("Mini Twitter");
+        adminPanelFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         JFrame popUpFrameTotalUser = new JFrame("Total User");
         JFrame popUpFrameTotalGroup = new JFrame("Total Group");
 
@@ -45,15 +46,14 @@ public class AdminPanel extends JFrame {
         textFieldAddGroup.setHorizontalAlignment(JTextField.CENTER);
 
         JButton buttonOpenUser = new JButton("Open user");
-
         JButton buttonShowUserTotal = new JButton("Show total user");
         JButton buttonShowGroupTotal = new JButton("Show total group");
         JButton buttonShowMessageTotal = new JButton("Show total message");
         JButton buttonShowPositivePercentage = new JButton("Show positive %");
 
-        frame.setSize(800, 500);
-        frame.setVisible(true);
-        frame.setLayout(null);
+        adminPanelFrame.setSize(800, 500);
+        adminPanelFrame.setVisible(true);
+        adminPanelFrame.setLayout(null);
 
         popUpFrameTotalUser.setSize(300, 200);
         popUpFrameTotalUser.setVisible(false);
@@ -66,7 +66,7 @@ public class AdminPanel extends JFrame {
         treeScrollPane.setBounds(25, 25, 400, 425);
 
         labelTreeView.setBounds(30, 5, 100, 20);
-        labelPopupTotalUser.setBounds(100,60, 250, 20);
+        labelPopupTotalUser.setBounds(100, 60, 250, 20);
         labelPopupTotalGroup.setBounds(100, 60, 250, 20);
 
         buttonAddUser.setBounds(610, 30, 150, 40);
@@ -85,17 +85,17 @@ public class AdminPanel extends JFrame {
 
         buttonShowPositivePercentage.setBounds(600, 400, 150, 40);
 
-        frame.add(labelTreeView);
-        frame.add(buttonAddUser);
-        frame.add(textFieldAddUser);
-        frame.add(buttonAddGroup);
-        frame.add(textFieldAddGroup);
-        frame.add(buttonOpenUser);
-        frame.add(buttonShowUserTotal);
-        frame.add(buttonShowGroupTotal);
-        frame.add(buttonShowMessageTotal);
-        frame.add(buttonShowPositivePercentage);
-        frame.add(treeScrollPane);
+        adminPanelFrame.add(labelTreeView);
+        adminPanelFrame.add(buttonAddUser);
+        adminPanelFrame.add(textFieldAddUser);
+        adminPanelFrame.add(buttonAddGroup);
+        adminPanelFrame.add(textFieldAddGroup);
+        adminPanelFrame.add(buttonOpenUser);
+        adminPanelFrame.add(buttonShowUserTotal);
+        adminPanelFrame.add(buttonShowGroupTotal);
+        adminPanelFrame.add(buttonShowMessageTotal);
+        adminPanelFrame.add(buttonShowPositivePercentage);
+        adminPanelFrame.add(treeScrollPane);
 
         popUpFrameTotalUser.add(labelPopupTotalUser);
         popUpFrameTotalGroup.add(labelPopupTotalGroup);
@@ -131,7 +131,7 @@ public class AdminPanel extends JFrame {
             if (nodeInfo instanceof Group && groupName.length() > 0 && !groupData.containsKey(groupName)) {
                 data = new Group();
                 data.setName(groupName);
-                
+
                 DefaultMutableTreeNode groupNode = new DefaultMutableTreeNode(data);
                 if (root != null) {
                     root.add(groupNode);
@@ -148,18 +148,23 @@ public class AdminPanel extends JFrame {
 
         });
 
-        buttonShowUserTotal.addActionListener(e ->{
+        buttonShowUserTotal.addActionListener(e -> {
             labelPopupTotalUser.setText("Total user(s): " + userData.size());
             popUpFrameTotalUser.setVisible(true);
         });
 
-        buttonShowGroupTotal.addActionListener(e->{
+        buttonShowGroupTotal.addActionListener(e -> {
             labelPopupTotalGroup.setText("Total group(s): " + groupData.size());
             popUpFrameTotalGroup.setVisible(true);
         });
 
+        buttonOpenUser.addActionListener(e -> {
+            userPanel.userPanel(true, nodeInfo);
+        });
+
         tree.addTreeSelectionListener(e -> {
             root = (DefaultMutableTreeNode) tree.getLastSelectedPathComponent();
+
             if (root == null) {
                 return;
             }
