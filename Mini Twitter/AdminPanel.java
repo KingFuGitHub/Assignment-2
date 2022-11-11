@@ -17,9 +17,12 @@ public class AdminPanel extends JFrame {
 
     public HashMap<String, User> userData = new HashMap<String, User>();
     public HashMap<String, Group> groupData = new HashMap<String, Group>();
+    Popup popup = Popup.getInstance();
+
 
     private static AdminPanel adminPanelObject;
     private AdminPanel(){}
+
 
     public static AdminPanel getInstance(){
         if(adminPanelObject == null){
@@ -137,6 +140,9 @@ public class AdminPanel extends JFrame {
                 DefaultTreeModel model = (DefaultTreeModel) tree.getModel();
                 model.reload(root);
                 textFieldAddUser.setText("");
+            }else{
+                // Popup popup = Popup.getInstance();
+                popup.showPopup("error", "invalid input");
             }
 
         });
@@ -161,17 +167,20 @@ public class AdminPanel extends JFrame {
                 DefaultTreeModel model = (DefaultTreeModel) tree.getModel();
                 model.reload(root);
                 textFieldAddGroup.setText("");
+            }else{
+                // Popup popup = Popup.getInstance();
+                popup.showPopup("error", "invalid input");
             }
 
         });
 
         buttonShowUserTotal.addActionListener(e -> {
-            Popup popup = new Popup();
+            // Popup popup = Popup.getInstance();
             popup.showPopup("Total user", "Total user(s): " + Integer.toString(userData.size()));
         });
 
         buttonShowGroupTotal.addActionListener(e -> {
-            Popup popup = new Popup();
+            // Popup popup = Popup.getInstance();
             popup.showPopup("Total group", "Total group(s): " + Integer.toString(groupData.size()));
         });
 
@@ -180,12 +189,12 @@ public class AdminPanel extends JFrame {
         });
 
         buttonShowMessageTotal.addActionListener(e->{
-            Popup popup = new Popup();
+            // Popup popup = Popup.getInstance();
             popup.showPopup("Total message", "Total message(s): " + totalMessage);
         });
 
         buttonShowPositivePercentage.addActionListener(e->{
-            Popup popup = new Popup();
+            // Popup popup = Popup.getInstance();
             popup.showPopup("Positive percentage", "Positive percentage: " + getPrecentageMessage());
         });
 

@@ -7,6 +7,7 @@ public class User implements Data {
 
     private String userID;
     private List<String> following = new ArrayList<String>();
+    private List<String> follower = new ArrayList<String>();
     private List<String> tweetMessages = new ArrayList<String>();
     private SimpleDateFormat format = new SimpleDateFormat("HH:mm");
 
@@ -25,7 +26,7 @@ public class User implements Data {
     }
 
     public void setFollowing(String userID) {
-        following.add("[" + formatTimeFollowing() + "] " + userID);
+        following.add(0, "[" + formatTimeFollowing() + "] " + userID);
     }
 
     public List<String> getFollowing() {
@@ -40,8 +41,8 @@ public class User implements Data {
         return false;
     }
 
-    public void setTweetMessages(String tweetMessage){
-        tweetMessages.add("[" + formatTimeTweetMessages()+ " " + userID + "] " + tweetMessage);
+    public void setTweetMessages(String tweetMessage, String userID){
+        tweetMessages.add(0, "[" + formatTimeTweetMessages()+ " " + userID + "] " + tweetMessage);
     }
 
     public List<String> getTweetMessages(){
@@ -58,6 +59,14 @@ public class User implements Data {
         Long time = System.currentTimeMillis();
         Date date = new Date(time);
         return date.toString();
+    }
+
+    public void setFollower(String userID){
+        follower.add(userID);
+    }
+
+    public List<String> getFollower(){
+        return follower;
     }
 
 }

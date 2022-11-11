@@ -1,4 +1,5 @@
 import java.util.HashMap;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -13,7 +14,7 @@ public class UserPanel extends JFrame {
             "inspiring", "joy", "marvelous", "motivated", "determined", "outgoing", "playful", "fun", "kind",
             "thoughful", "thanks", "thankyou", "thank", "generous", "delightful", "handsome", "pretty", "genius",
             "bright", "useful", "laugh", "hilarious", "optimistic", "peaceful", "freedom", "relax", "humble",
-            "courageous", "diligent", "adventerous", "adaptable", "thankful", "hopeful", "lol" };
+            "courageous", "diligent", "adventerous", "adaptable", "thankful", "hopeful", "lol", "cool" };
 
     public void userPanel(Object nodeInfo, HashMap<String, User> userData) {
 
@@ -60,11 +61,19 @@ public class UserPanel extends JFrame {
                         && !currentUserInfo.getID().equals(userID)) {
                     currentUserInfo.setFollowing(userID);
                     followerList.setListData(currentUserInfo.getFollowing().toArray());
+
+                    User user = userData.get(userID);
+                    // System.out.println(user);
+                    user.setFollower(currentUserInfo.getID());
+
+
                     userIDTextField.setText("");
+
                     followerList.invalidate();
                     followerList.validate();
                     followerList.repaint();
                 }
+
             });
 
             postTweetButton.addActionListener(e -> {
@@ -78,13 +87,26 @@ public class UserPanel extends JFrame {
                             break;
                         }
                     }
-                    currentUserInfo.setTweetMessages(tweet);
+
+                    currentUserInfo.setTweetMessages(tweet, currentUserInfo.getID());
                     newsFeedList.setListData(currentUserInfo.getTweetMessages().toArray());
                     adminPanel.increaseTotalMessage();
+
+                    List<String> followers = currentUserInfo.getFollower();
+                    System.out.println(followers);
+                    for(int i = 0; i < followers.size(); i++){
+                        String temp = followers.get(i);
+                        User temp1 = userData.get(temp);
+                        temp1.setTweetMessages(tweet, currentUserInfo.getID());
+                        newsFeedList.setListData(temp1.getTweetMessages().toArray());
+                        newsFeedList.invalidate();
+                    }
+
                     tweetMessage.setText("");
-                    newsFeedList.invalidate();
-                    newsFeedList.validate();
-                    newsFeedList.repaint();
+                    // newsFeedList.invalidate();
+                    // newsFeedList.validate();
+                    // newsFeedList.repaint();
+               
                 }
             });
 
