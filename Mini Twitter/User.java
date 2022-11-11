@@ -5,6 +5,7 @@ import java.util.List;
 
 public class User implements Visitor, Observer, Subject {
 
+    // declaring and initializing variables
     private String userID;
     private List<String> following = new ArrayList<String>();
     private List<String> follower = new ArrayList<String>();
@@ -12,6 +13,8 @@ public class User implements Visitor, Observer, Subject {
     private SimpleDateFormat format = new SimpleDateFormat("HH:mm");
     private List<Observer> observers = new ArrayList<Observer>();
 
+
+    // getters and setters are below including some helper methods
     @Override
     public String getID() {
         return userID.toString();
@@ -38,7 +41,6 @@ public class User implements Visitor, Observer, Subject {
         if (following.contains(userID)) {
             return true;
         }
-
         return false;
     }
 
@@ -73,13 +75,6 @@ public class User implements Visitor, Observer, Subject {
     public void attach(Observer observer){
         observers.add(observer);
     }
-
-    // @Override
-    // public void notify(String message) {
-    //     for(Observer observer: observers){
-    //         observer.update(message);
-    //     }        
-    // }
 
     @Override
     public void update(String message, String userID) {

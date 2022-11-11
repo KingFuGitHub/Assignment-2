@@ -9,12 +9,14 @@ import javax.swing.JTextField;
 
 public class UserPanel extends JFrame {
 
+    // a list of positive words
     private String positiveWords[] = { "good", "goodjob", "great", "happy", "amazing", "awesome", "excellent",
             "inspiring", "joy", "marvelous", "motivated", "determined", "outgoing", "playful", "fun", "kind",
             "thoughful", "thanks", "thankyou", "thank", "generous", "delightful", "handsome", "pretty", "genius",
             "bright", "useful", "laugh", "hilarious", "optimistic", "peaceful", "freedom", "relax", "humble",
             "courageous", "diligent", "adventerous", "adaptable", "thankful", "hopeful", "lol", "cool" };
 
+    // the user panel
     public void userPanel(Object nodeInfo, HashMap<String, Visitor> userData) {
 
         if (nodeInfo != null && nodeInfo instanceof User) {
@@ -54,6 +56,7 @@ public class UserPanel extends JFrame {
             userPanelFrame.add(postTweetButton);
             userPanelFrame.add(newsFeedListScrollPane);
 
+            // follow user button
             followUserButton.addActionListener(e -> {
                 String userID = userIDTextField.getText();
 
@@ -75,6 +78,7 @@ public class UserPanel extends JFrame {
 
             });
 
+            // post tweet button
             postTweetButton.addActionListener(e -> {
                 String tweet = tweetMessage.getText();
 
@@ -95,12 +99,8 @@ public class UserPanel extends JFrame {
                     newsFeedList.invalidate();
                     newsFeedList.validate();
                     newsFeedList.repaint();
-
                 }
-                
-            });
-
+            }); 
         }
     }
-
 }

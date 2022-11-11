@@ -7,10 +7,8 @@ import javax.swing.tree.TreeSelectionModel;
 
 public class AdminPanel extends JFrame {
 
-
+    // declaring and initializing variables
     private Visitor data; 
-    private User user;
-    private Group group;
     private DefaultMutableTreeNode root;
     private UserPanel userPanel = new UserPanel();
     Object nodeInfo;
@@ -19,16 +17,18 @@ public class AdminPanel extends JFrame {
 
     public HashMap<String, Visitor> userData = new HashMap<String, Visitor>();
     public HashMap<String, Visitor> groupData = new HashMap<String, Visitor>();
-    // Popup popup = new;
     private Popup popup = Popup.getInstance();
 
-
+    // private so that the class can be accessed by only getInstance() method
     private static AdminPanel adminPanelObject;
+
+    // private constructor
     private AdminPanel(){}
 
-
+    // singleton
     public static AdminPanel getInstance(){
         if(adminPanelObject == null){
+            // sychonized block to remove overhead
             synchronized(AdminPanel.class){
                 if(adminPanelObject == null){
                     adminPanelObject = new AdminPanel();
@@ -36,13 +36,16 @@ public class AdminPanel extends JFrame {
             }
         }
 
+        // returns the singleton object
         return adminPanelObject;
     }
 
+    // increase the total message by 1
     public void increaseTotalMessage(){
         totalMessage+=1;
     }
 
+    // calculate and return the % positive tweets
     public String getPrecentageMessage(){
         if(totalMessage == 0){
             return "0%";
@@ -52,19 +55,21 @@ public class AdminPanel extends JFrame {
         return String.format("%.2f",(temp1/temp2)*100.0) + "%";
     }
 
+    // update the positive % message by 1
     public void increasePercentageMessage(){
         percentagePositiveMessage += 1;
     }
 
+    // this is the main admin panel GUI and some logic.
     public void adminPanel() {
 
+        // setting the root to the of type group and setting the name to be Root.
         data = new Group();
         data.setID("Root");
-        // group = new Group();
-        // group.setID("Root");
         root = new DefaultMutableTreeNode(data);
         nodeInfo = root.getUserObject();
 
+        // creating the frame for Admin panel giving it the name Mini Twitter
         JFrame adminPanelFrame = new JFrame("Mini Twitter");
         adminPanelFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -83,6 +88,7 @@ public class AdminPanel extends JFrame {
         JTextField textFieldAddGroup = new JTextField();
         textFieldAddGroup.setHorizontalAlignment(JTextField.CENTER);
 
+        // buttons objects with their names initialized.
         JButton buttonOpenUser = new JButton("Open user");
         JButton buttonShowUserTotal = new JButton("Show total user");
         JButton buttonShowGroupTotal = new JButton("Show total group");
@@ -93,6 +99,8 @@ public class AdminPanel extends JFrame {
         adminPanelFrame.setVisible(true);
         adminPanelFrame.setLayout(null);
 
+
+        // setting bounds for each object.
         treeScrollPane.setBounds(25, 25, 400, 425);
 
         labelTreeView.setBounds(30, 5, 100, 20);
@@ -113,6 +121,7 @@ public class AdminPanel extends JFrame {
 
         buttonShowPositivePercentage.setBounds(600, 400, 150, 40);
 
+        // add the required objects to the admin panel frame.
         adminPanelFrame.add(labelTreeView);
         adminPanelFrame.add(buttonAddUser);
         adminPanelFrame.add(textFieldAddUser);
@@ -125,6 +134,8 @@ public class AdminPanel extends JFrame {
         adminPanelFrame.add(buttonShowPositivePercentage);
         adminPanelFrame.add(treeScrollPane);
 
+
+        // add user button
         buttonAddUser.addActionListener(e -> {
 
             String userName = textFieldAddUser.getText().toString().toLowerCase();
@@ -132,8 +143,6 @@ public class AdminPanel extends JFrame {
             if (nodeInfo instanceof Group && userName.length() > 0 && !userData.containsKey(userName)) {
                 data = new User();
                 data.setID(userName);
-                // user = new User();
-                // user.setID(userName);
 
                 DefaultMutableTreeNode userNode = new DefaultMutableTreeNode(data);
                 if (root != null) {
@@ -148,12 +157,13 @@ public class AdminPanel extends JFrame {
                 model.reload(root);
                 textFieldAddUser.setText("");
             }else{
-                // Popup popup = Popup.getInstance();
                 popup.showPopup("error", "invalid input");
             }
 
         });
 
+
+        // add group button
         buttonAddGroup.addActionListener(e -> {
 
             String groupName = textFieldAddGroup.getText().toString().toUpperCase();
@@ -161,9 +171,6 @@ public class AdminPanel extends JFrame {
             if (nodeInfo instanceof Group && groupName.length() > 0 && !groupData.containsKey(groupName)) {
                 data = new Group();
                 data.setID(groupName);
-
-                // group = new Group();
-                // group.setID(groupName);
 
                 DefaultMutableTreeNode groupNode = new DefaultMutableTreeNode(data);
                 if (root != null) {
@@ -178,42 +185,44 @@ public class AdminPanel extends JFrame {
                 model.reload(root);
                 textFieldAddGroup.setText("");
             }else{
-                // Popup popup = Popup.getInstance();
                 popup.showPopup("error", "invalid input");
             }
 
         });
 
+        // show user total button
         buttonShowUserTotal.addActionListener(e -> {
-            // Popup popup = Popup.getInstance();
             popup.showPopup("Total user", "Total user(s): " + Integer.toString(userData.size()));
         });
 
+        // show total group button
         buttonShowGroupTotal.addActionListener(e -> {
-            // Popup popup = Popup.getInstance();
             popup.showPopup("Total group", "Total group(s): " + Integer.toString(groupData.size()));
         });
 
+        // open user button
         buttonOpenUser.addActionListener(e -> {
             userPanel.userPanel(nodeInfo, userData);
         });
 
+        // show total message button
         buttonShowMessageTotal.addActionListener(e->{
-            // Popup popup = Popup.getInstance();
             popup.showPopup("Total message", "Total message(s): " + totalMessage);
         });
 
+        // show positive % tweets
         buttonShowPositivePercentage.addActionListener(e->{
-            // Popup popup = Popup.getInstance();
             popup.showPopup("Positive percentage", "Positive percentage: " + getPrecentageMessage());
         });
 
+        // a selection listener for the tree view.
         tree.addTreeSelectionListener(e -> {
             root = (DefaultMutableTreeNode) tree.getLastSelectedPathComponent();
 
             if (root == null) {
                 return;
             }
+            // get the tree node information
             nodeInfo = root.getUserObject();
             System.out.println(nodeInfo);
         });
