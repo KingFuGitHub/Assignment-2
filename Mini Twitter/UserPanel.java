@@ -1,7 +1,4 @@
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
-import java.util.concurrent.locks.Lock;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -21,7 +18,6 @@ public class UserPanel extends JFrame {
     public void userPanel(Object nodeInfo, HashMap<String, Visitor> userData) {
 
         if (nodeInfo != null && nodeInfo instanceof User) {
-        // if (nodeInfo != null && nodeInfo instanceof User) {
 
             AdminPanel adminPanel = AdminPanel.getInstance();
 
@@ -94,16 +90,6 @@ public class UserPanel extends JFrame {
                     newsFeedList.setListData(currentUserInfo.getTweetMessages().toArray());
                     adminPanel.increaseTotalMessage();
                     currentUserInfo.notifyUsers(tweet, currentUserInfo.toString());
-
-                    // List<String> followers = currentUserInfo.getFollower();
-                    // System.out.println(followers);
-                    // for(int i = 0; i < followers.size(); i++){
-                    // String temp = followers.get(i);
-                    // User temp1 = userData.get(temp);
-                    // temp1.setTweetMessages(tweet, currentUserInfo.getID());
-                    // newsFeedList.setListData(temp1.getTweetMessages().toArray());
-                    // newsFeedList.invalidate();
-                    // }
 
                     tweetMessage.setText("");
                     newsFeedList.invalidate();
