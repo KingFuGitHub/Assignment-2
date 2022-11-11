@@ -7,7 +7,6 @@ import javax.swing.tree.TreeSelectionModel;
 
 public class AdminPanel extends JFrame {
 
-    // private Data data;
     private User user;
     private Group group;
     private DefaultMutableTreeNode root;
@@ -46,12 +45,6 @@ public class AdminPanel extends JFrame {
 
         JFrame adminPanelFrame = new JFrame("Mini Twitter");
         adminPanelFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        JFrame popUpFrameTotalUser = new JFrame("Total User");
-        popUpFrameTotalUser.setLocationRelativeTo(null);
-        JFrame popUpFrameTotalGroup = new JFrame("Total Group");
-        popUpFrameTotalGroup.setLocationRelativeTo(null);
-        JFrame popUpFrameTotalMessage = new JFrame("Total Messages");
-        popUpFrameTotalMessage.setLocationRelativeTo(null);
 
         JTree tree = new JTree(root);
         tree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
@@ -59,10 +52,7 @@ public class AdminPanel extends JFrame {
         JScrollPane treeScrollPane = new JScrollPane(tree);
 
         JLabel labelTreeView = new JLabel("Tree View");
-        JLabel labelPopupTotalUser = new JLabel("Total user(s): " + userData.size());
-        JLabel labelPopupTotalGroup = new JLabel("Total group(s): " + groupData.size());
-        JLabel labelPopupTotalMessage = new JLabel("Total message(s): " + totalMessage);
-
+        
         JButton buttonAddUser = new JButton("Add User");
         JTextField textFieldAddUser = new JTextField();
         textFieldAddUser.setHorizontalAlignment(JTextField.CENTER);
@@ -81,24 +71,9 @@ public class AdminPanel extends JFrame {
         adminPanelFrame.setVisible(true);
         adminPanelFrame.setLayout(null);
 
-        popUpFrameTotalUser.setSize(300, 200);
-        popUpFrameTotalUser.setVisible(false);
-        popUpFrameTotalUser.setLayout(null);
-
-        popUpFrameTotalGroup.setSize(300, 200);
-        popUpFrameTotalGroup.setVisible(false);
-        popUpFrameTotalGroup.setLayout(null);
-
-        popUpFrameTotalMessage.setSize(300, 200);
-        popUpFrameTotalMessage.setVisible(false);
-        popUpFrameTotalMessage.setLayout(null);
-
         treeScrollPane.setBounds(25, 25, 400, 425);
 
         labelTreeView.setBounds(30, 5, 100, 20);
-        labelPopupTotalUser.setBounds(100, 60, 250, 20);
-        labelPopupTotalGroup.setBounds(100, 60, 250, 20);
-        labelPopupTotalMessage.setBounds(100, 60, 250, 20);
 
         buttonAddUser.setBounds(610, 30, 150, 40);
         textFieldAddUser.setBounds(440, 30, 165, 40);
@@ -127,10 +102,6 @@ public class AdminPanel extends JFrame {
         adminPanelFrame.add(buttonShowMessageTotal);
         adminPanelFrame.add(buttonShowPositivePercentage);
         adminPanelFrame.add(treeScrollPane);
-
-        popUpFrameTotalUser.add(labelPopupTotalUser);
-        popUpFrameTotalGroup.add(labelPopupTotalGroup);
-        popUpFrameTotalMessage.add(labelPopupTotalMessage);
 
         buttonAddUser.addActionListener(e -> {
 
@@ -181,13 +152,13 @@ public class AdminPanel extends JFrame {
         });
 
         buttonShowUserTotal.addActionListener(e -> {
-            labelPopupTotalUser.setText("Total user(s): " + userData.size());
-            popUpFrameTotalUser.setVisible(true);
+            Popup popup = new Popup();
+            popup.showPopup("Total user", "Total user(s): " + Integer.toString(userData.size()));
         });
 
         buttonShowGroupTotal.addActionListener(e -> {
-            labelPopupTotalGroup.setText("Total group(s): " + groupData.size());
-            popUpFrameTotalGroup.setVisible(true);
+            Popup popup = new Popup();
+            popup.showPopup("Total group", "Total group(s): " + Integer.toString(groupData.size()));
         });
 
         buttonOpenUser.addActionListener(e -> {
@@ -195,8 +166,8 @@ public class AdminPanel extends JFrame {
         });
 
         buttonShowMessageTotal.addActionListener(e->{
-            labelPopupTotalMessage.setText("Total message(s): " + totalMessage);
-            popUpFrameTotalMessage.setVisible(true);
+            Popup popup = new Popup();
+            popup.showPopup("Total message", "Total message(s): " + totalMessage);
         });
 
         tree.addTreeSelectionListener(e -> {
