@@ -3,13 +3,14 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class User implements Data {
+public class User implements Visitor, Observer, Subject {
 
     private String userID;
     private List<String> following = new ArrayList<String>();
     private List<String> follower = new ArrayList<String>();
     private List<String> tweetMessages = new ArrayList<String>();
     private SimpleDateFormat format = new SimpleDateFormat("HH:mm");
+    private List<Observer> observers = new ArrayList<Observer>();
 
     @Override
     public String getID() {
@@ -67,6 +68,29 @@ public class User implements Data {
 
     public List<String> getFollower(){
         return follower;
+    }
+
+    public void attach(Observer observer){
+        observers.add(observer);
+    }
+
+    // @Override
+    // public void notify(String message) {
+    //     for(Observer observer: observers){
+    //         observer.update(message);
+    //     }        
+    // }
+
+    @Override
+    public void update(String message, String userID) {
+        setTweetMessages(message, userID);
+    }
+
+    @Override
+    public void notifyUsers(String message, String userID) {
+        for(Observer observer: observers){
+            observer.update(message, userID);
+        }            
     }
 
 }

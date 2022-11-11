@@ -1,4 +1,4 @@
-public class Group implements Data {
+public class Group implements Visitor {
     
     private String groupID;
 

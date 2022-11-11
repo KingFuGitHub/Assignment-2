@@ -1,5 +1,7 @@
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.locks.Lock;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -16,12 +18,14 @@ public class UserPanel extends JFrame {
             "bright", "useful", "laugh", "hilarious", "optimistic", "peaceful", "freedom", "relax", "humble",
             "courageous", "diligent", "adventerous", "adaptable", "thankful", "hopeful", "lol", "cool" };
 
-    public void userPanel(Object nodeInfo, HashMap<String, User> userData) {
+    public void userPanel(Object nodeInfo, HashMap<String, Visitor> userData) {
 
         if (nodeInfo != null && nodeInfo instanceof User) {
+        // if (nodeInfo != null && nodeInfo instanceof User) {
+
             AdminPanel adminPanel = AdminPanel.getInstance();
 
-            User currentUserInfo = userData.get(nodeInfo.toString());
+            User currentUserInfo = (User) userData.get(nodeInfo.toString());
 
             JFrame userPanelFrame = new JFrame(currentUserInfo.getID());
             JButton followUserButton = new JButton("Follow User");
@@ -62,10 +66,9 @@ public class UserPanel extends JFrame {
                     currentUserInfo.setFollowing(userID);
                     followerList.setListData(currentUserInfo.getFollowing().toArray());
 
-                    User user = userData.get(userID);
-                    // System.out.println(user);
+                    User user = (User) userData.get(userID);
                     user.setFollower(currentUserInfo.getID());
-
+                    user.attach(currentUserInfo);
 
                     userIDTextField.setText("");
 
@@ -80,10 +83,9 @@ public class UserPanel extends JFrame {
                 String tweet = tweetMessage.getText();
 
                 if (!tweet.equals("")) {
-                    for(int i = 0; i<positiveWords.length; i++){
-                        if(tweet.contains(positiveWords[i])){
+                    for (int i = 0; i < positiveWords.length; i++) {
+                        if (tweet.contains(positiveWords[i])) {
                             adminPanel.increasePercentageMessage();
-                            System.out.println("Executed");
                             break;
                         }
                     }
@@ -91,25 +93,28 @@ public class UserPanel extends JFrame {
                     currentUserInfo.setTweetMessages(tweet, currentUserInfo.getID());
                     newsFeedList.setListData(currentUserInfo.getTweetMessages().toArray());
                     adminPanel.increaseTotalMessage();
+                    currentUserInfo.notifyUsers(tweet, currentUserInfo.toString());
 
-                    List<String> followers = currentUserInfo.getFollower();
-                    System.out.println(followers);
-                    for(int i = 0; i < followers.size(); i++){
-                        String temp = followers.get(i);
-                        User temp1 = userData.get(temp);
-                        temp1.setTweetMessages(tweet, currentUserInfo.getID());
-                        newsFeedList.setListData(temp1.getTweetMessages().toArray());
-                        newsFeedList.invalidate();
-                    }
+                    // List<String> followers = currentUserInfo.getFollower();
+                    // System.out.println(followers);
+                    // for(int i = 0; i < followers.size(); i++){
+                    // String temp = followers.get(i);
+                    // User temp1 = userData.get(temp);
+                    // temp1.setTweetMessages(tweet, currentUserInfo.getID());
+                    // newsFeedList.setListData(temp1.getTweetMessages().toArray());
+                    // newsFeedList.invalidate();
+                    // }
 
                     tweetMessage.setText("");
-                    // newsFeedList.invalidate();
-                    // newsFeedList.validate();
-                    // newsFeedList.repaint();
-               
+                    newsFeedList.invalidate();
+                    newsFeedList.validate();
+                    newsFeedList.repaint();
+
                 }
+                
             });
 
         }
     }
+
 }
