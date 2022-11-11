@@ -9,6 +9,11 @@ import javax.swing.JTextField;
 
 public class UserPanel extends JFrame {
 
+    private String positiveWords[] = { "good", "goodjob", "great", "happy", "amazing", "awesome", "excellent",
+            "inspiring", "joy", "marvelous", "motivated", "determined", "outgoing", "playful", "fun", "kind",
+            "thoughful", "thanks", "thankyou", "thank", "generous", "delightful", "handsome", "pretty", "genius",
+            "bright", "useful", "laugh", "hilarious", "optimistic", "peaceful", "freedom", "relax", "humble",
+            "courageous", "diligent", "adventerous", "adaptable", "thankful", "hopeful", "lol" };
 
     public void userPanel(Object nodeInfo, HashMap<String, User> userData) {
 
@@ -62,10 +67,17 @@ public class UserPanel extends JFrame {
                 }
             });
 
-            postTweetButton.addActionListener(e->{
+            postTweetButton.addActionListener(e -> {
                 String tweet = tweetMessage.getText();
 
-                if(!tweet.equals("")){
+                if (!tweet.equals("")) {
+                    for(int i = 0; i<positiveWords.length; i++){
+                        if(tweet.contains(positiveWords[i])){
+                            adminPanel.increasePercentageMessage();
+                            System.out.println("Executed");
+                            break;
+                        }
+                    }
                     currentUserInfo.setTweetMessages(tweet);
                     newsFeedList.setListData(currentUserInfo.getTweetMessages().toArray());
                     adminPanel.increaseTotalMessage();

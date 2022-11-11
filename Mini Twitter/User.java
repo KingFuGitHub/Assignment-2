@@ -7,7 +7,7 @@ public class User implements Data {
 
     private String userID;
     private List<String> following = new ArrayList<String>();
-    private List<String> tweetMessages = new ArrayList<>();
+    private List<String> tweetMessages = new ArrayList<String>();
     private SimpleDateFormat format = new SimpleDateFormat("HH:mm");
 
     @Override

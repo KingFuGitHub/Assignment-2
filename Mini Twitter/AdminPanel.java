@@ -13,6 +13,7 @@ public class AdminPanel extends JFrame {
     private UserPanel userPanel = new UserPanel();
     Object nodeInfo;
     private int totalMessage = 0;
+    private int percentagePositiveMessage = 0;
 
     public HashMap<String, User> userData = new HashMap<String, User>();
     public HashMap<String, Group> groupData = new HashMap<String, Group>();
@@ -36,6 +37,19 @@ public class AdminPanel extends JFrame {
         totalMessage+=1;
     }
 
+    public String getPrecentageMessage(){
+        if(totalMessage == 0){
+            return "0%";
+        }
+        double temp1 = percentagePositiveMessage;
+        double temp2 = totalMessage;
+        return String.format("%.2f",(temp1/temp2)*100.0) + "%";
+    }
+
+    public void increasePercentageMessage(){
+        percentagePositiveMessage += 1;
+    }
+
     public void adminPanel() {
 
         group = new Group();
@@ -52,7 +66,7 @@ public class AdminPanel extends JFrame {
         JScrollPane treeScrollPane = new JScrollPane(tree);
 
         JLabel labelTreeView = new JLabel("Tree View");
-        
+
         JButton buttonAddUser = new JButton("Add User");
         JTextField textFieldAddUser = new JTextField();
         textFieldAddUser.setHorizontalAlignment(JTextField.CENTER);
@@ -168,6 +182,11 @@ public class AdminPanel extends JFrame {
         buttonShowMessageTotal.addActionListener(e->{
             Popup popup = new Popup();
             popup.showPopup("Total message", "Total message(s): " + totalMessage);
+        });
+
+        buttonShowPositivePercentage.addActionListener(e->{
+            Popup popup = new Popup();
+            popup.showPopup("Positive percentage", "Positive percentage: " + getPrecentageMessage());
         });
 
         tree.addTreeSelectionListener(e -> {
