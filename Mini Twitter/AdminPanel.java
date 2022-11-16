@@ -17,7 +17,9 @@ public class AdminPanel extends JFrame {
 
     public HashMap<String, Visitor> userData = new HashMap<String, Visitor>();
     public HashMap<String, Visitor> groupData = new HashMap<String, Visitor>();
+    // private Popup popup = Popup.getInstance();
     private Popup popup = Popup.getInstance();
+
 
     // private so that the class can be accessed by only getInstance() method
     private static AdminPanel adminPanelObject;

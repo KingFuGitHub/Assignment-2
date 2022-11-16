@@ -1,5 +1,7 @@
+
 import java.util.HashMap;
 
+import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JList;
@@ -16,6 +18,8 @@ public class UserPanel extends JFrame {
             "bright", "useful", "laugh", "hilarious", "optimistic", "peaceful", "freedom", "relax", "humble",
             "courageous", "diligent", "adventerous", "adaptable", "thankful", "hopeful", "lol", "cool" };
 
+    private HashMap<String, DefaultListModel> DefaultListModelHashMap = new HashMap<String, DefaultListModel>();
+
     // the user panel
     public void userPanel(Object nodeInfo, HashMap<String, Visitor> userData) {
 
@@ -24,17 +28,34 @@ public class UserPanel extends JFrame {
             AdminPanel adminPanel = AdminPanel.getInstance();
 
             User currentUserInfo = (User) userData.get(nodeInfo.toString());
-
             JFrame userPanelFrame = new JFrame(currentUserInfo.getID());
             JButton followUserButton = new JButton("Follow User");
             JTextField userIDTextField = new JTextField();
             userIDTextField.setHorizontalAlignment(JTextField.CENTER);
-            JList followerList = new JList<>(currentUserInfo.getFollowing().toArray());
+            DefaultListModel followerListModel = new DefaultListModel();
+
+            for (int i = 0; i < currentUserInfo.getFollowing().size(); i++) {
+                followerListModel.addElement(
+                        "[" + currentUserInfo.getAFollowingDate(i) + "] " + currentUserInfo.getAFollowing(i));
+            }
+
+            JList followerList = new JList(followerListModel);
+
             JScrollPane follwerListScrollPane = new JScrollPane(followerList);
             JTextArea tweetMessage = new JTextArea();
             JScrollPane tweetMessageScrollPane = new JScrollPane(tweetMessage);
             JButton postTweetButton = new JButton("Post Tweet");
-            JList newsFeedList = new JList<>(currentUserInfo.getTweetMessages().toArray());
+            DefaultListModel newsFeedListModel = new DefaultListModel();
+
+            for (int i = 0; i < currentUserInfo.getTweetMessages().size(); i++) {
+                newsFeedListModel.addElement("[" + currentUserInfo.getATweetMessagesDate(i) + " "
+                        + currentUserInfo.getAFrom(i) + "] " + currentUserInfo.getATweetMessage(i));
+            }
+
+            JList newsFeedList = new JList(newsFeedListModel);
+
+            DefaultListModelHashMap.put(currentUserInfo.getID(), newsFeedListModel);
+
             JScrollPane newsFeedListScrollPane = new JScrollPane(newsFeedList);
 
             userPanelFrame.setSize(350, 500);
@@ -58,28 +79,28 @@ public class UserPanel extends JFrame {
 
             // follow user button
             followUserButton.addActionListener(e -> {
-                String userID = userIDTextField.getText();
 
+                String userID = userIDTextField.getText();
                 if (userData.containsKey(userID) && currentUserInfo.isContainID(userID) == false
                         && !currentUserInfo.getID().equals(userID)) {
+
                     currentUserInfo.setFollowing(userID);
-                    followerList.setListData(currentUserInfo.getFollowing().toArray());
+                    currentUserInfo.setFollowingDate();
+                    followerListModel.add(0, "[" + currentUserInfo.getAFollowingDate(0) + "] " + userID);
 
                     User user = (User) userData.get(userID);
                     user.setFollower(currentUserInfo.getID());
                     user.attach(currentUserInfo);
 
                     userIDTextField.setText("");
-
-                    followerList.invalidate();
-                    followerList.validate();
-                    followerList.repaint();
                 }
 
             });
 
             // post tweet button
             postTweetButton.addActionListener(e -> {
+
+                System.out.println(currentUserInfo.getFrom());
                 String tweet = tweetMessage.getText();
 
                 if (!tweet.equals("")) {
@@ -91,16 +112,27 @@ public class UserPanel extends JFrame {
                     }
 
                     currentUserInfo.setTweetMessages(tweet, currentUserInfo.getID());
-                    newsFeedList.setListData(currentUserInfo.getTweetMessages().toArray());
-                    adminPanel.increaseTotalMessage();
-                    currentUserInfo.notifyUsers(tweet, currentUserInfo.toString());
 
+                    currentUserInfo.setFrom(currentUserInfo.getID());
+                    currentUserInfo.setTweetMessagesDate();
+                    String tweetToBeAdded = "[" + currentUserInfo.getATweetMessagesDate(0) + " "
+                            + currentUserInfo.getAFrom(0) + "] " + tweet;
+
+                    newsFeedListModel.add(0, tweetToBeAdded);
+                    adminPanel.increaseTotalMessage();
+
+                    currentUserInfo.notifyUsers(tweet, currentUserInfo.getID());
+
+                    for (int i = 0; i < currentUserInfo.getFollower().size(); i++) {
+                        if (DefaultListModelHashMap.containsKey(currentUserInfo.getAFollower(i))) {
+                            DefaultListModelHashMap.get(currentUserInfo.getAFollower(i)).add(0, tweetToBeAdded);
+                        }
+
+                    }
                     tweetMessage.setText("");
-                    newsFeedList.invalidate();
-                    newsFeedList.validate();
-                    newsFeedList.repaint();
                 }
-            }); 
+            });
+
         }
     }
 }
