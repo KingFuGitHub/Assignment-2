@@ -127,8 +127,8 @@ public class UserPanel extends JFrame {
                         if (DefaultListModelHashMap.containsKey(currentUserInfo.getAFollower(i))) {
                             DefaultListModelHashMap.get(currentUserInfo.getAFollower(i)).add(0, tweetToBeAdded);
                         }
-
                     }
+                    
                     tweetMessage.setText("");
                 }
             });

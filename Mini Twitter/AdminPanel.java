@@ -15,10 +15,15 @@ public class AdminPanel extends JFrame {
     private int totalMessage = 0;
     private int percentagePositiveMessage = 0;
 
-    public HashMap<String, Visitor> userData = new HashMap<String, Visitor>();
-    public HashMap<String, Visitor> groupData = new HashMap<String, Visitor>();
+    // public HashMap<String, Visitor> userData = new HashMap<String, Visitor>();
+    // public HashMap<String, Visitor> groupData = new HashMap<String, Visitor>();
+
     // private Popup popup = Popup.getInstance();
     private Popup popup = Popup.getInstance();
+
+    private Visitor1 visitorUser = new UserData();
+    private Visitor1 visitorGroup = new GroupData();
+
 
 
     // private so that the class can be accessed by only getInstance() method
@@ -142,7 +147,9 @@ public class AdminPanel extends JFrame {
 
             String userName = textFieldAddUser.getText().toString().toLowerCase();
 
-            if (nodeInfo instanceof Group && userName.length() > 0 && !userData.containsKey(userName)) {
+            // if (nodeInfo instanceof Group && userName.length() > 0 && !userData.containsKey(userName)) {
+            if (nodeInfo instanceof Group && userName.length() > 0 && !visitorUser.getMap().containsKey(userName)) {
+
                 data = new User();
                 data.setID(userName);
 
@@ -154,7 +161,9 @@ public class AdminPanel extends JFrame {
                     root.add(userNode);
                 }
 
-                userData.put(userName, data);
+                // userData.put(userName, data);
+                visitorUser.getMap().put(userName, data);
+
                 DefaultTreeModel model = (DefaultTreeModel) tree.getModel();
                 model.reload(root);
                 textFieldAddUser.setText("");
@@ -170,7 +179,9 @@ public class AdminPanel extends JFrame {
 
             String groupName = textFieldAddGroup.getText().toString().toUpperCase();
 
-            if (nodeInfo instanceof Group && groupName.length() > 0 && !groupData.containsKey(groupName)) {
+            // if (nodeInfo instanceof Group && groupName.length() > 0 && !groupData.containsKey(groupName)) {
+            if (nodeInfo instanceof Group && groupName.length() > 0 && !visitorGroup.getMap().containsKey(groupName)) {
+
                 data = new Group();
                 data.setID(groupName);
 
@@ -182,7 +193,9 @@ public class AdminPanel extends JFrame {
                     root.add(groupNode);
                 }
 
-                groupData.put(groupName, data);
+                // groupData.put(groupName, data);
+                visitorGroup.getMap().put(groupName, data);
+
                 DefaultTreeModel model = (DefaultTreeModel) tree.getModel();
                 model.reload(root);
                 textFieldAddGroup.setText("");
@@ -194,17 +207,23 @@ public class AdminPanel extends JFrame {
 
         // show user total button
         buttonShowUserTotal.addActionListener(e -> {
-            popup.showPopup("Total user", "Total user(s): " + Integer.toString(userData.size()));
+            // popup.showPopup("Total user", "Total user(s): " + Integer.toString(userData.size()));
+            popup.showPopup("Total user", "Total user(s): " + Integer.toString(visitorUser.getMap().size()));
+
         });
 
         // show total group button
         buttonShowGroupTotal.addActionListener(e -> {
-            popup.showPopup("Total group", "Total group(s): " + Integer.toString(groupData.size()));
+            // popup.showPopup("Total group", "Total group(s): " + Integer.toString(groupData.size()));
+            popup.showPopup("Total group", "Total group(s): " + Integer.toString(visitorGroup.getMap().size()));
+
         });
 
         // open user button
         buttonOpenUser.addActionListener(e -> {
-            userPanel.userPanel(nodeInfo, userData);
+            // userPanel.userPanel(nodeInfo, userData);
+            userPanel.userPanel(nodeInfo, visitorUser.getMap());
+
         });
 
         // show total message button
