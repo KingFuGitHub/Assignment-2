@@ -1,6 +1,8 @@
+import java.util.HashMap;
 
-// a visitor class to get data for the users and groups
+// visitor pattern to update the number of users and groups
 public interface Visitor {
-    public void setID(String ID);
-    public String getID();
+    public void addNode(String ID, Data visitor);
+    public HashMap<String, Data> getMap();
+    
 }

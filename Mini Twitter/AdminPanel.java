@@ -1,4 +1,3 @@
-import java.util.HashMap;
 
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -8,21 +7,18 @@ import javax.swing.tree.TreeSelectionModel;
 public class AdminPanel extends JFrame {
 
     // declaring and initializing variables
-    private Visitor data; 
+    private Data data; 
     private DefaultMutableTreeNode root;
     private UserPanel userPanel = new UserPanel();
     Object nodeInfo;
+    
     private int totalMessage = 0;
     private int percentagePositiveMessage = 0;
 
-    // public HashMap<String, Visitor> userData = new HashMap<String, Visitor>();
-    // public HashMap<String, Visitor> groupData = new HashMap<String, Visitor>();
-
-    // private Popup popup = Popup.getInstance();
     private Popup popup = Popup.getInstance();
 
-    private Visitor1 visitorUser = new UserData();
-    private Visitor1 visitorGroup = new GroupData();
+    private Visitor visitorUser = new UserData();
+    private Visitor visitorGroup = new GroupData();
 
 
 
@@ -62,9 +58,9 @@ public class AdminPanel extends JFrame {
         return String.format("%.2f",(temp1/temp2)*100.0) + "%";
     }
 
-    // update the positive % message by 1
-    public void increasePercentageMessage(){
-        percentagePositiveMessage += 1;
+    // update the positive % message by 1 and the amount of followers
+    public void increasePercentageMessage(int followers){
+        percentagePositiveMessage += 1 + followers;
     }
 
     // this is the main admin panel GUI and some logic.
@@ -147,7 +143,6 @@ public class AdminPanel extends JFrame {
 
             String userName = textFieldAddUser.getText().toString().toLowerCase();
 
-            // if (nodeInfo instanceof Group && userName.length() > 0 && !userData.containsKey(userName)) {
             if (nodeInfo instanceof Group && userName.length() > 0 && !visitorUser.getMap().containsKey(userName)) {
 
                 data = new User();
@@ -161,7 +156,6 @@ public class AdminPanel extends JFrame {
                     root.add(userNode);
                 }
 
-                // userData.put(userName, data);
                 visitorUser.getMap().put(userName, data);
 
                 DefaultTreeModel model = (DefaultTreeModel) tree.getModel();
@@ -179,7 +173,6 @@ public class AdminPanel extends JFrame {
 
             String groupName = textFieldAddGroup.getText().toString().toUpperCase();
 
-            // if (nodeInfo instanceof Group && groupName.length() > 0 && !groupData.containsKey(groupName)) {
             if (nodeInfo instanceof Group && groupName.length() > 0 && !visitorGroup.getMap().containsKey(groupName)) {
 
                 data = new Group();
@@ -193,7 +186,6 @@ public class AdminPanel extends JFrame {
                     root.add(groupNode);
                 }
 
-                // groupData.put(groupName, data);
                 visitorGroup.getMap().put(groupName, data);
 
                 DefaultTreeModel model = (DefaultTreeModel) tree.getModel();
@@ -207,22 +199,23 @@ public class AdminPanel extends JFrame {
 
         // show user total button
         buttonShowUserTotal.addActionListener(e -> {
-            // popup.showPopup("Total user", "Total user(s): " + Integer.toString(userData.size()));
             popup.showPopup("Total user", "Total user(s): " + Integer.toString(visitorUser.getMap().size()));
 
         });
 
         // show total group button
         buttonShowGroupTotal.addActionListener(e -> {
-            // popup.showPopup("Total group", "Total group(s): " + Integer.toString(groupData.size()));
             popup.showPopup("Total group", "Total group(s): " + Integer.toString(visitorGroup.getMap().size()));
 
         });
 
         // open user button
         buttonOpenUser.addActionListener(e -> {
-            // userPanel.userPanel(nodeInfo, userData);
-            userPanel.userPanel(nodeInfo, visitorUser.getMap());
+            if(nodeInfo instanceof User){
+                userPanel.userPanel(nodeInfo, visitorUser.getMap());
+            }else{
+                popup.showPopup("Error", "Did not select a user.");
+            }
 
         });
 
@@ -245,7 +238,6 @@ public class AdminPanel extends JFrame {
             }
             // get the tree node information
             nodeInfo = root.getUserObject();
-            System.out.println(nodeInfo);
         });
 
     }

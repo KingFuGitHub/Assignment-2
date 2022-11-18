@@ -3,7 +3,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class User implements Visitor, Observer, Subject {
+public class User implements Data, Observer, Subject {
 
     // declaring and initializing variables
     private String userID;
@@ -15,7 +15,6 @@ public class User implements Visitor, Observer, Subject {
     private List<String> followingDates = new ArrayList<String>();
 
     private List<String> tweetMessagesDate = new ArrayList<String>();
-    // private List<String>
 
     private List<String> from = new ArrayList<String>();
 

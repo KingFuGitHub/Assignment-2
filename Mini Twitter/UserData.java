@@ -1,23 +1,21 @@
 import java.util.HashMap;
 
-public class UserData implements Visitor1{
-    private HashMap<String, Visitor> userData = new HashMap<String, Visitor>();
-
+public class UserData implements Visitor{
+    private HashMap<String, Data> userData = new HashMap<String, Data>();
    
-
+    // to add a node user or group
     @Override
-    public void add(String ID, Visitor visitor) {
-        // TODO Auto-generated method stub
+    public void addNode(String ID, Data visitor) {
         userData.put(ID, visitor);
     }
 
-
-
+    // to get the hashmap
     @Override
-    public HashMap<String, Visitor> getMap() {
-        // TODO Auto-generated method stub
+    public HashMap<String, Data> getMap() {
         return userData;
     }
+
+
 
     
 }

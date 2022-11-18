@@ -1,20 +1,18 @@
 import java.util.HashMap;
 
-public class GroupData implements Visitor1{
+public class GroupData implements Visitor{
 
-    private HashMap<String, Visitor> groupData = new HashMap<String, Visitor>();
+    private HashMap<String, Data> groupData = new HashMap<String, Data>();
 
     @Override
-    public void add(String ID, Visitor visitor) {
-        // TODO Auto-generated method stub
+    public void addNode(String ID, Data visitor) {
         groupData.put(ID, visitor);
 
         
     }
 
     @Override
-    public HashMap<String, Visitor> getMap() {
-        // TODO Auto-generated method stub
+    public HashMap<String, Data> getMap() {
         return groupData;
     }
 

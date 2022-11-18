@@ -21,7 +21,7 @@ public class UserPanel extends JFrame {
     private HashMap<String, DefaultListModel> DefaultListModelHashMap = new HashMap<String, DefaultListModel>();
 
     // the user panel
-    public void userPanel(Object nodeInfo, HashMap<String, Visitor> userData) {
+    public void userPanel(Object nodeInfo, HashMap<String, Data> userData) {
 
         if (nodeInfo != null && nodeInfo instanceof User) {
 
@@ -88,10 +88,12 @@ public class UserPanel extends JFrame {
                     currentUserInfo.setFollowingDate();
                     followerListModel.add(0, "[" + currentUserInfo.getAFollowingDate(0) + "] " + userID);
 
+                    // observer design pattern following a user will attach self to that user.
                     User user = (User) userData.get(userID);
                     user.setFollower(currentUserInfo.getID());
                     user.attach(currentUserInfo);
 
+                    // empty the textfield
                     userIDTextField.setText("");
                 }
 
@@ -104,9 +106,11 @@ public class UserPanel extends JFrame {
                 String tweet = tweetMessage.getText();
 
                 if (!tweet.equals("")) {
+
+                    // scan for positive words and count them.
                     for (int i = 0; i < positiveWords.length; i++) {
                         if (tweet.contains(positiveWords[i])) {
-                            adminPanel.increasePercentageMessage();
+                            adminPanel.increasePercentageMessage(currentUserInfo.getFollower().size());
                             break;
                         }
                     }
@@ -119,16 +123,24 @@ public class UserPanel extends JFrame {
                             + currentUserInfo.getAFrom(0) + "] " + tweet;
 
                     newsFeedListModel.add(0, tweetToBeAdded);
+                    
+
+                    // increase total message
                     adminPanel.increaseTotalMessage();
 
+
+                    // Observer design pattern notifying all users for update.
                     currentUserInfo.notifyUsers(tweet, currentUserInfo.getID());
 
+                    // update the UI and increase the total message
                     for (int i = 0; i < currentUserInfo.getFollower().size(); i++) {
                         if (DefaultListModelHashMap.containsKey(currentUserInfo.getAFollower(i))) {
                             DefaultListModelHashMap.get(currentUserInfo.getAFollower(i)).add(0, tweetToBeAdded);
+                            adminPanel.increaseTotalMessage();
                         }
                     }
                     
+                    // tempty the textfield
                     tweetMessage.setText("");
                 }
             });

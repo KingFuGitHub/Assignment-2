@@ -1,4 +1,4 @@
-public class Group implements Visitor {
+public class Group implements Data {
     
     // delare variables and initialize it
     private String groupID;
