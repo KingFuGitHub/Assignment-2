@@ -7,8 +7,6 @@ public class GroupData implements Visitor{
     @Override
     public void addNode(String ID, Data visitor) {
         groupData.put(ID, visitor);
-
-        
     }
 
     @Override

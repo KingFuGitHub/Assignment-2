@@ -11,12 +11,20 @@ public class User implements Data, Observer, Subject {
     private List<String> follower = new ArrayList<String>();
     private List<String> tweetMessages = new ArrayList<String>();
     private SimpleDateFormat format = new SimpleDateFormat("HH:mm");
+    private SimpleDateFormat formatCreatedDate = new SimpleDateFormat("MM/dd/YYYY");
+    private SimpleDateFormat formatLastUpdated = new SimpleDateFormat("hh:mm aa MM/dd/YYYY");
+
     private List<Observer> observers = new ArrayList<Observer>();
     private List<String> followingDates = new ArrayList<String>();
 
     private List<String> tweetMessagesDate = new ArrayList<String>();
 
     private List<String> from = new ArrayList<String>();
+
+    private String createdDate; 
+
+    private String lastUpdated;
+    private Long lastUpdatedMilli;
 
     // getters and setters are below including some helper methods
     @Override
@@ -70,6 +78,14 @@ public class User implements Data, Observer, Subject {
         Long time = System.currentTimeMillis();
         Date date = new Date(time);
         return format.format(date);
+    }
+
+    public String formatTimeCreationDate(){
+        return formatCreatedDate.format(new Date(System.currentTimeMillis()));
+    }
+
+    public String formatTimeLastUpdated(){
+        return formatLastUpdated.format(new Date(System.currentTimeMillis()));
     }
 
     public void setFollower(String userID) {
@@ -140,6 +156,40 @@ public class User implements Data, Observer, Subject {
 
     public List<String> getFrom() {
         return from;
+    }
+
+    @Override
+    public void setCreatedDate(){
+        createdDate = formatTimeCreationDate();
+    }
+
+    @Override
+    public String getCreatedDate(){
+        return createdDate;
+    }
+
+    public void setLastUpdatedMilli(){
+        lastUpdatedMilli = System.currentTimeMillis();
+    }
+
+    public Long getLastUpdatedMilli(){
+        return lastUpdatedMilli;
+    }
+
+    public void setLastUpdated(){
+        lastUpdated = formatTimeLastUpdated();
+    }
+
+    public String getLastUpdate(){
+        if(lastUpdated == null){
+            return "N/A";
+        }
+        return lastUpdated;
+    }
+
+    @Override
+    public User getUser() {
+        return this;
     }
 
 }

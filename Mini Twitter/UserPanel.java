@@ -4,6 +4,7 @@ import java.util.HashMap;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -19,6 +20,8 @@ public class UserPanel extends JFrame {
             "courageous", "diligent", "adventerous", "adaptable", "thankful", "hopeful", "lol", "cool" };
 
     private HashMap<String, DefaultListModel> DefaultListModelHashMap = new HashMap<String, DefaultListModel>();
+    private HashMap<String, JLabel> JListHashMap = new HashMap<String, JLabel>();
+
 
     // the user panel
     public void userPanel(Object nodeInfo, HashMap<String, Data> userData) {
@@ -28,6 +31,9 @@ public class UserPanel extends JFrame {
             AdminPanel adminPanel = AdminPanel.getInstance();
 
             User currentUserInfo = (User) userData.get(nodeInfo.toString());
+            JLabel labelLastUpdated = new JLabel("Last updated: " + currentUserInfo.getLastUpdate());
+            JLabel labelCreatedDate = new JLabel("Created Date: " + currentUserInfo.getCreatedDate());
+
             JFrame userPanelFrame = new JFrame(currentUserInfo.getID());
             JButton followUserButton = new JButton("Follow User");
             JTextField userIDTextField = new JTextField();
@@ -55,27 +61,32 @@ public class UserPanel extends JFrame {
             JList newsFeedList = new JList(newsFeedListModel);
 
             DefaultListModelHashMap.put(currentUserInfo.getID(), newsFeedListModel);
+            JListHashMap.put(currentUserInfo.getID(), labelLastUpdated);
 
             JScrollPane newsFeedListScrollPane = new JScrollPane(newsFeedList);
 
-            userPanelFrame.setSize(350, 500);
+            userPanelFrame.setSize(350, 545);
             userPanelFrame.setVisible(true);
             userPanelFrame.setLayout(null);
             userPanelFrame.setLocationRelativeTo(null);
 
-            userIDTextField.setBounds(5, 10, 170, 50);
-            followUserButton.setBounds(175, 10, 170, 50);
-            follwerListScrollPane.setBounds(5, 65, 340, 140);
-            tweetMessageScrollPane.setBounds(5, 210, 200, 100);
-            postTweetButton.setBounds(210, 210, 135, 100);
-            newsFeedListScrollPane.setBounds(5, 315, 340, 150);
+            labelLastUpdated.setBounds(15, 5, 300, 20);
+            userIDTextField.setBounds(5, 30, 170, 50);
+            followUserButton.setBounds(175, 30, 170, 50);
+            follwerListScrollPane.setBounds(5, 85, 340, 140);
+            tweetMessageScrollPane.setBounds(5, 230, 200, 100);
+            postTweetButton.setBounds(210, 230, 135, 100);
+            newsFeedListScrollPane.setBounds(5, 335, 340, 150);
+            labelCreatedDate.setBounds(170, 490, 200, 20);
 
+            userPanelFrame.add(labelLastUpdated);
             userPanelFrame.add(follwerListScrollPane);
             userPanelFrame.add(followUserButton);
             userPanelFrame.add(userIDTextField);
             userPanelFrame.add(tweetMessageScrollPane);
             userPanelFrame.add(postTweetButton);
             userPanelFrame.add(newsFeedListScrollPane);
+            userPanelFrame.add(labelCreatedDate);
 
             // follow user button
             followUserButton.addActionListener(e -> {
@@ -123,23 +134,28 @@ public class UserPanel extends JFrame {
                             + currentUserInfo.getAFrom(0) + "] " + tweet;
 
                     newsFeedListModel.add(0, tweetToBeAdded);
-                    
 
                     // increase total message
                     adminPanel.increaseTotalMessage();
 
-
                     // Observer design pattern notifying all users for update.
                     currentUserInfo.notifyUsers(tweet, currentUserInfo.getID());
+
+                    currentUserInfo.setLastUpdatedMilli();
+                    currentUserInfo.setLastUpdated();
+                    currentUserInfo.notifyUsers(currentUserInfo.getLastUpdate(), currentUserInfo.getID());
+                    labelLastUpdated.setText("Last updated: " + currentUserInfo.getLastUpdate());
 
                     // update the UI and increase the total message
                     for (int i = 0; i < currentUserInfo.getFollower().size(); i++) {
                         if (DefaultListModelHashMap.containsKey(currentUserInfo.getAFollower(i))) {
                             DefaultListModelHashMap.get(currentUserInfo.getAFollower(i)).add(0, tweetToBeAdded);
                             adminPanel.increaseTotalMessage();
+                            JLabel followerText = JListHashMap.get(currentUserInfo.getAFollower(i));
+                            followerText.setText("Last updated: " + currentUserInfo.getLastUpdate());
                         }
                     }
-                    
+
                     // tempty the textfield
                     tweetMessage.setText("");
                 }

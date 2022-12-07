@@ -3,4 +3,7 @@
 public interface Data {
     public void setID(String ID);
     public String getID();
+    public void setCreatedDate();
+    public String getCreatedDate();
+    public User getUser();
 }
